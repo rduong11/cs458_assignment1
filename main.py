@@ -1,8 +1,9 @@
+#  Display the decrypted plaintext.
 import string
 
 #an alphabet dictionary that maps the letter to its relative position in the alphabet
 #{A: , B: 2, ... Z: 26}
-alphabet = {letter: index for index, letter in enumerate(string.ascii_uppercase, start=0)}
+alphabet = {letter: index for index, letter in enumerate(string.ascii_letters, start=0)}
 
 #reverse of above
 #{1: A, 2: B, ... 26: Z}
@@ -15,24 +16,22 @@ indices = {index: letter for letter, index in alphabet.items()}
 #  Display the resulting ciphertext.
 
 def encryption():
-    plainText = input("Enter plaintext: ").upper()
+    plainText = input("Enter plaintext: ")
     key = int(input("Enter key: "))
     cipherText = ""
     #enumerate through plaintext and print out the letters in its positions + key shift (relative to the alphabet mapping)
 
     for letter in plainText:
-        shift = key
         
         if letter in alphabet:
-            shiftedPosition = (alphabet[letter] + shift) % 26  # new position is alphabet position + key; % is for the edge case of letters towards the end so that it can wrap back around
-            cipherText += indices[shiftedPosition] #add shifted letter to ciphertext
-
+            shiftedPosition = (alphabet[letter] + key) % 52  # new position is alphabet position + key; % is for the edge case of letters towards the end so that it can wrap back around
             #Case-follow (QoL)
 
-            # if letter.isupper():
-            #     cipherText += shiftedLetter
-            # else:
-            #     cipherText += shiftedLetter.lower()
+            #add shifted letter to ciphertext, if upper keep but if lower then make lowercase
+            if letter.isupper():
+                cipherText += indices[shiftedPosition] 
+            else:
+                cipherText += indices[shiftedPosition].lower()
         else:
             cipherText += letter # non-alphabet characters edge case
 
@@ -40,33 +39,29 @@ def encryption():
 
 # Decryption:
 #  Prompt the user to enter ciphertext and the corresponding key used for encryption.
-#  Use the entered key to perform decryption and retrieve the original plaintext.
-#  Display the decrypted plaintext.
-
+#  Use the entered k
 def decryption():
     #reverse of encryption but instead decrement in the shifted position. 
-    cipherText = input("Enter ciphertext: ").upper()
+    cipherText = input("Enter ciphertext: ")
     key = int(input("Enter key: "))
     plainText = ""
     #enumerate through plaintext and print out the letters in its positions + key shift (relative to the alphabet mapping)
 
     for letter in cipherText:
-        shift = key
         
         if letter in alphabet:
-            shiftedPosition = (alphabet[letter] - shift) % 26  # new position is alphabet position - key; the % is for the edge case of letters towards the end so that it can wrap back around
-            plainText += indices[shiftedPosition] #add shifted letter to ciphertext
-
+            shiftedPosition = (alphabet[letter] - key) % 52  # new position is alphabet position + key; % is for the edge case of letters towards the end so that it can wrap back around
             #Case-follow (QoL)
 
-            # if letter.isupper():
-            #     cipherText += shiftedLetter
-            # else:
-            #     cipherText += shiftedLetter.lower()
+            #add shifted letter to ciphertext, if upper keep but if lower then make lowercase
+            if letter.isupper():
+                plainText += indices[shiftedPosition] 
+            else:
+                plainText += indices[shiftedPosition].lower()
         else:
             plainText += letter # non-alphabet characters edge case
 
-    print("Ciphertext: " + plainText)
+    print("Plaintext: " + plainText)
 
 
 
@@ -76,7 +71,27 @@ def decryption():
 #  Display all the possible plaintext results.
 
 def bruteForceAttack():
-    pass
+    cipherText = input("Enter ciphertext: ")
+    
+    # shift key values are 1-26, but in this case the alphabet dictionary contains both lowercase and uppercase so it will be 1-52(51 keys)
+    for key in range(0, 52):
+        possiblePlainText = ""
+
+        #decrement key so each key is tried
+        for letter in cipherText:
+            if letter in alphabet:
+                shiftedPosition = (alphabet[letter] + key) % 52  
+
+                if letter.isupper():
+                    possiblePlainText += indices[shiftedPosition]
+                else:
+                    possiblePlainText += indices[shiftedPosition].lower()
+            else:
+                possiblePlainText += letter  
+
+        print(f"Key {key}: {possiblePlainText}")
+
+    
 
 
 
