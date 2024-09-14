@@ -17,7 +17,11 @@ indices = {index: letter for letter, index in alphabet.items()}
 
 def encryption():
     plainText = input("Enter plaintext: ")
+    if plainText == "":
+        return print("No text inputted.")
     key = int(input("Enter key: "))
+    if key == "":
+        return print("No key inputted.")
     cipherText = ""
     #enumerate through plaintext and print out the letters in its positions + key shift (relative to the alphabet mapping)
 
@@ -43,7 +47,11 @@ def encryption():
 def decryption():
     #reverse of encryption but instead decrement in the shifted position. 
     cipherText = input("Enter ciphertext: ")
+    if cipherText == "":
+        return print("No text inputted.")
     key = int(input("Enter key: "))
+    if key == "":
+        return print("No key inputted.")
     plainText = ""
     #enumerate through plaintext and print out the letters in its positions + key shift (relative to the alphabet mapping)
 
@@ -72,7 +80,8 @@ def decryption():
 
 def bruteForceAttack():
     cipherText = input("Enter ciphertext: ")
-    
+    if cipherText == "":
+        return print("No text inputted.")
     # shift key values are 1-26, but in this case the alphabet dictionary contains both lowercase and uppercase so it will be 1-52(51 keys)
     for key in range(0, 52):
         possiblePlainText = ""
